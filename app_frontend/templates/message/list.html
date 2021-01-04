@@ -1,0 +1,63 @@
+<!-- extend from base layout -->
+{% extends "layout.html" %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    <!-- header -->
+    <nav class="sub-header row container-fluid">
+        <ol class="breadcrumb">
+            <li><a href="/">首页</a></li>
+            <li class="active">消息中心</li>
+            <li class="active">留言记录</li>
+        </ol>
+        <div class="btn-group pull-right" role="group" aria-label="...">
+        {% if request.query_string == 'msg_type=send' %}
+            <a type="button" class="btn btn-default" href="{{ url_for('message.lists') }}">接收</a>
+            <a type="button" class="btn btn-default active">发送</a>
+        {% else %}
+            <a type="button" class="btn btn-default active">接收</a>
+            <a type="button" class="btn btn-default" href="{{ url_for('message.lists', msg_type='send') }}">发送</a>
+        {% endif %}
+        </div>
+    </nav>
+
+    <hr/>
+    <!-- content -->
+    <div class="table-responsive">
+        {# <table class="table table-striped"> #}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>消息明细ID</th>
+                <th>发送用户</th>
+                <th>接收用户</th>
+                <th>消息</th>
+                <th>时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for msg, user_profile_put, user_profile_get in pagination.items %}
+            <tr class="text-muted">
+                <td>{{ msg.id }}</td>
+                <td>{{ user_profile_put.nickname | default('系统消息') }} [{{ user_profile_put.user_id }}]</td>
+                <td>{{ user_profile_get.nickname }} [{{ user_profile_get.user_id }}]</td>
+                <td>{{ msg.content }}</td>
+                <td>{{ moment(msg.create_time).format('YYYY-MM-DD HH:mm:ss') }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {# 翻页 #}
+        {% from "macros.html" import render_pagination %}
+        {{ render_pagination(pagination, 'message.lists') }}
+    </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}

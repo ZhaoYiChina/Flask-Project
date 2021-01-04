@@ -1,0 +1,91 @@
+body {
+    padding-top: 50px;
+    /*padding-bottom: 61px;*/
+    background-color: #f9f9f9
+}
+
+body, html {
+    height: 100%;
+}
+
+.full_height {
+  margin: 0 0 -61px 0;
+  min-height: 100%;
+}
+
+footer {
+    margin-top: 54px !important;
+    clear: both;
+}
+
+
+.body_img::after {
+    background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0;
+}
+
+.body_img {
+    background: rgba(0, 0, 0, 0) url("../img/cat.jpg") no-repeat fixed center center / cover ;
+}
+
+ul#affix_nav_ul.affix {
+    top: 70px; /* Set the top position of pinned element */
+}
+
+.translucent {
+    background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0;
+}
+
+/* 防止id定位起始位置被顶部固定导航条遮住 */
+/*section {*/
+    /*padding-top: 70px;*/
+    /*margin-top: -70px;*/
+/*}*/
+
+/* 返回顶部 */
+a#top-link {
+    text-decoration: none;
+}
+
+a#top-link:hover {
+    color: #55acee;
+    text-decoration: none;
+}
+
+#top-link-block.affix-top {
+    position: absolute; /* allows it to "slide" up into view */
+    bottom: -82px;
+    right: 10px;
+}
+
+#top-link-block.affix {
+    position: fixed; /* keeps it on the bottom once in view */
+    bottom: 21px;
+    right: 10px;
+}
+
+.btn-time-bar {
+    padding: 0 12px;
+}
+
+.input-copy
+{
+    padding: 6px 10px;
+}
+
+/*活动标签顶部色条*/
+.nav-tabs>li.active>a.selected,.nav-tabs>li.active>a.selected:focus,.nav-tabs>li.active>a.selected:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: solid;
+    border-width: 3px 1px 0 1px;
+    border-radius: 3px 3px 0 0;
+    border-color: #e36209 #e1e4e8 transparent;
+}
+
+/*闪现消息顶部固定*/
+.alert-fixed-top {
+    position: fixed;
+    top: 50px;
+    z-index: 1040;
+}

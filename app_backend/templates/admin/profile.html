@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li><a href="/">后台管理</a></li>
+        <li><a href="javascript:void(0);" onclick="$('#menu-admin').trigger('click');">运营管理</a></li>
+        <li class="active">个人中心</li>
+    </ol>
+    {# 表单 #}
+    <form class="form-horizontal" method="post" action="">
+        {{ form.csrf_token }}
+        {# 标签导航 #}
+
+        <div class="form-group{% if form.username.errors %} has-error{% endif %}">
+            {{ form.username.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                {{ form.username(class="form-control", placeholder="管理账号", minlength="2", maxlength="20") }}
+                {% for error in form.username.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group{% if form.password.errors %} has-error{% endif %}">
+            {{ form.password.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                {{ form.password(class="form-control", placeholder="登录密码[6-20位]，若无需更改，请留空", maxlength="20") }}
+                {% for error in form.password.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group{% if form.area_id.errors %} has-error{% endif %}">
+            {{ form.area_id.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                {{ form.area_id(data_header="选择手机区号") }}
+                {% for error in form.area_id.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group{% if form.phone.errors %} has-error{% endif %}">
+            {{ form.phone.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                {{ form.phone(class="form-control", placeholder="手机号码", type="tel", maxlength=11) }}
+                {% for error in form.phone.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group{% if form.role_id.errors %} has-error{% endif %}">
+            {{ form.role_id.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                {{ form.role_id(class="form-control", placeholder="管理角色", data_width="fit", data_header="选择角色") }}
+                {% for error in form.role_id.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group{% if form.create_time.errors %} has-error{% endif %}">
+            {{ form.create_time.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                <div class="form-control">
+                    {{ moment(form.create_time.data).format('YYYY-MM-DD HH:mm:ss') }}
+                </div>
+                {% for error in form.create_time.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group{% if form.update_time.errors %} has-error{% endif %}">
+            {{ form.update_time.label(class="col-sm-2 control-label") }}
+            <div class="col-sm-10">
+                <div class="form-control">
+                    {{ moment(form.update_time.data).format('YYYY-MM-DD HH:mm:ss') }}
+                </div>
+                {% for error in form.update_time.errors %}
+                    <span class="help-block">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-success btn-load" data-loading-text="编辑中">编辑</button>
+                <button type="reset" class="btn btn-default">重新填写</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 初始化赋值
+    var area_id = $('#area_id');
+    area_id.selectpicker('val', '{{ form.area_id.data }}');
+    // 处理选项修改
+    area_id.on('changed.bs.select', function (event, clickedIndex, newValue, oldValue) {
+        // console.log($('#area_id').val());
+        // console.log(event);
+        // console.log(clickedIndex);
+        // console.log(newValue);
+        // console.log(oldValue);
+    });
+
+    // 初始化赋值
+    var role_id = $('#role_id');
+    role_id.selectpicker('val', '{{ form.role_id.data }}');
+    // 处理选项修改
+    role_id.on('changed.bs.select', function (event, clickedIndex, newValue, oldValue) {
+        // console.log($('#role_id').val());
+        // console.log(event);
+        // console.log(clickedIndex);
+        // console.log(newValue);
+        // console.log(oldValue);
+    });
+</script>
+{% endblock %}

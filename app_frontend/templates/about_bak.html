@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>about me!</h2>
+        <div class="row text-center">
+            <div class="col-xs-6 col-md-3">
+                <a href="" data-toggle="modal" data-target="#img_modal">
+                    <img class="img-thumbnail" src="{{ url_for('static', filename='img/cat.jpg') }}">
+                </a>
+                <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">Button</a>
+                        <a href="#" class="btn btn-default" role="button">Button</a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a href="" data-toggle="modal" data-target="#img_modal">
+                    <img class="img-thumbnail" src="{{ url_for('static', filename='img/cat.jpg') }}">
+                </a>
+                <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">Button</a>
+                        <a href="#" class="btn btn-default" role="button">Button</a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a href="" data-toggle="modal" data-target="#img_modal">
+                    <img class="img-thumbnail" src="{{ url_for('static', filename='img/cat.jpg') }}">
+                </a>
+                <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">Button</a>
+                        <a href="#" class="btn btn-default" role="button">Button</a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a href="" data-toggle="modal" data-target="#img_modal">
+                    <img class="img-thumbnail" src="{{ url_for('static', filename='img/cat.jpg') }}">
+                </a>
+                <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+                    <p>
+                        <a href="#" class="btn btn-primary" role="button">Button</a>
+                        <a href="#" class="btn btn-default" role="button">Button</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="img_modal" tabindex="-1" role="dialog" aria-labelledby="img_modal_label">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="img_modal_label">Big Image</h4>
+                </div>
+                <div class="modal-body">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/cat.jpg') }}">
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 模态窗口垂直居中
+$("#img_modal").on('shown.bs.modal', function(){
+      var $this = $(this);
+      var $modal_dialog = $this.find('.modal-dialog');
+      var m_top = ( $(window).height() - $modal_dialog.height() )/2;
+      $modal_dialog.css({'margin': m_top + 'px auto'});
+    });
+</script>
+{% endblock %}

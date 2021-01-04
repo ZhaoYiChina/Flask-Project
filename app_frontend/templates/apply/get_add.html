@@ -1,0 +1,117 @@
+<!-- extend from base layout -->
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+    <ol class="breadcrumb">
+        <li><a href="/">首页</a></li>
+        <li class="active">提现中心</li>
+        <li class="active">我要提现</li>
+    </ol>
+    <div class="row">
+        <div class="table-responsive col-lg-8 col-md-12">
+            <form class="form-horizontal" method="post" action="">
+                {{ form.csrf_token }}
+                <div class="form-group{% if form.type_pay.errors %} has-error{% endif %}">
+                    {{ form.type_pay.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.type_pay(default=form.type_pay.data | int) }}
+                        {% for error in form.type_pay.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                        <span class="help-block">
+                            <a target="_blank" href="https://cshall.alipay.com/lab/help_detail.htm?help_id=212269">《支付宝限额说明》</a>
+                            <br/>
+                            <a target="_blank" href="http://kf.qq.com/touch/faq/151210NZzmuY151210ZRj2y2.html">《微信支付限额说明》</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group{% if form.type_withdraw.errors %} has-error{% endif %}">
+                    {{ form.type_withdraw.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.type_withdraw(default=form.type_withdraw.data | int) }}
+                        {% for error in form.type_withdraw.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                        <span class="help-block">当前余额，钱包余额:{{ current_user.id | user_wallet }}，数字货币:{{ current_user.id | user_bit_coin }}</span>
+                    </div>
+                </div>
+                <div class="form-group{% if form.money_apply.errors %} has-error{% endif %}">
+                    {{ form.money_apply.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.money_apply(class="form-control", placeholder="申请金额["+APPLY_GET_STEP+"的倍数]", type="number", min=APPLY_GET_MIN_EACH, max=APPLY_GET_MAX_EACH, step=APPLY_GET_STEP) }}
+                        {% for error in form.money_apply.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                        <span class="help-block">申请金额 必须为{{ APPLY_GET_STEP }}的倍数，最小金额{{ APPLY_GET_MIN_EACH }}，最大金额{{ APPLY_GET_MAX_EACH }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-success btn-load" data-loading-text="申请中">申请</button>
+                        <button type="reset" class="btn btn-default">重新填写</button>
+                        <button class="btn btn-default" onclick="history.back();">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- 用户概要 -->
+        <div class="col-lg-4 col-md-12">
+            <!-- 状态信息 -->
+            {% include('user/_status.html') %}
+            <!-- 推广链接 -->
+            {% include('user/_invite_link.html') %}
+            <!-- 账户信息 -->
+            {% include('user/_account_info.html') %}
+            <!-- 我的团队 -->
+            {% include('user/_team_tree.html') %}
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='plugin/clipboard.js-1.6.1/dist/clipboard.min.js') }}"></script>
+<script>
+    /**
+     * 用户自己激活
+     * @returns {boolean}
+     */
+    function self_active() {
+        // console.log($(form).serialize());
+        $.ajax({
+            url: "{{ url_for('user.ajax_self_active') }}",
+            type: 'GET',
+            dataType: 'json',
+            success: function (result) {
+                // console.log(result);
+                if(result.hasOwnProperty('error')){
+                    alert(result.error);
+                }else {
+                    alert(result.success);
+                    document.location.reload();
+                }
+            }
+        });
+        return false;
+    }
+</script>
+<script>
+    //推广链接复制
+    var clipboard = new Clipboard('.btn');
+
+    clipboard.on('success', function(e) {
+        // console.info('Action:', e.action);
+        // console.info('Text:', e.text);
+        // console.info('Trigger:', e.trigger);
+        e.clearSelection();
+        alert('复制成功，粘贴使用推广链接');
+    });
+
+    clipboard.on('error', function(e) {
+        // console.error('Action:', e.action);
+        // console.error('Trigger:', e.trigger);
+        alert('操作失败，重新复制推广链接');
+    });
+</script>
+{% endblock %}

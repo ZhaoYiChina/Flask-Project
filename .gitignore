@@ -1,0 +1,25 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Python template
+
+*.env
+*.pyc
+#*.log
+.idea/
+*.DS_Store
+
+app_frontend/static/uploads/*
+!app_frontend/static/uploads/index.html
+
+# 数据
+docker/mariadb/backup/*
+
+# 日志
+app_wechat/
+db/backup/
+docker/mariadb/backup/
+docker/mariadb/data/
+docker/mongodb/data/
+docker/nginx/log/
+docker/rabbitmq/data/
+docker/redis/data/
+logs/

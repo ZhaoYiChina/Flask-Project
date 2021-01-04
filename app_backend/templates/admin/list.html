@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li><a href="/">后台管理</a></li>
+        <li><a href="javascript:void(0);" onclick="$('#menu-admin').trigger('click');">权限管理</a></li>
+        <li class="active">后台成员</li>
+    </ol>
+
+    <div class="table-responsive">
+        {# <table class="table table-striped"> #}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>管理账号</th>
+{#                <th>area_id</th>#}
+                <th>手机区号</th>
+                <th>手机号码</th>
+                <th>角色</th>
+                <th>删除状态</th>
+                <th>登录时间</th>
+                <th>登录IP</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for admin in pagination.items %}
+            <tr class="text-muted">
+                <td>{{ admin.id }}</td>
+                <td>{{ admin.username }}</td>
+{#                <td>{{ admin.area_id }}</td>#}
+                <td>{{ admin.area_code }}</td>
+                <td>{{ admin.phone }}</td>
+                <td>{{ admin.role_id | role_admin }}</td>
+                <td>{{ admin.status_delete | status_delete }}</td>
+                <td>{% if admin.login_time %}{{ moment(admin.login_time).format('YYYY-MM-DD HH:mm:ss') }}{% endif %}</td>
+                <td>{% if admin.login_ip %}{{ admin.login_ip }}{% endif %}</td>
+                <td>{{ moment(admin.create_time).format('YYYY-MM-DD HH:mm:ss') }}</td>
+                <td>{{ moment(admin.update_time).format('YYYY-MM-DD HH:mm:ss') }}</td>
+                <td>
+                    <a href="{{ url_for('admin.edit', admin_id=admin.id, next=request.path) }}" rel="tooltip" title="编辑"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="javascript:void(0);" onclick="admin_delete({{ admin.id }});" rel="tooltip" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {# 翻页 #}
+        {% from "macros.html" import render_pagination %}
+        {{ render_pagination(pagination, 'admin.lists') }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 成员删除
+function admin_delete(admin_uid){
+    if(confirm("删除数据不能恢复，是否确认删除?"))
+    {
+        // console.log(admin_uid);
+        $.getJSON('{{ url_for('admin.ajax_delete') }}',
+        {
+            admin_uid: admin_uid
+        }, function (result) {
+            if(result.hasOwnProperty('error')){
+                alert(result.error);
+            }else {
+                alert(result.success);
+                window.location.reload();
+            }
+        });
+        return false;
+    }
+}
+</script>
+{% endblock %}

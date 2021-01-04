@@ -1,0 +1,265 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+    <ol class="breadcrumb">
+        <li><a href="/">首页</a></li>
+        <li class="active">用户中心</li>
+        <li class="active">基本信息</li>
+    </ol>
+
+    <div class="row">
+        <div class="table-responsive col-lg-8 col-md-12">
+            {# 表单 #}
+            <form class="form-horizontal" method="post" action="">
+                {{ form.csrf_token }}
+                {# 标签导航 #}
+                <ul class="nav nav-tabs">  {# 填充整个导航条：nav-justified #}
+                    <li role="presentation"><a href="{{ url_for('user.auth') }}">登录信息</a></li>
+                    <li role="presentation"><a href="{{ url_for('user.bank') }}">银行信息</a></li>
+                    <li role="presentation" class="active"><a class="selected" href="{{ url_for('user.profile') }}">基本信息</a></li>
+                </ul>
+                <div class="form-group"></div>
+                <div class="form-group{% if form.user_pid.errors %} has-error{% endif %}">
+                    {{ form.user_pid.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+{#                        {{ form.user_pid(class="form-control", placeholder="推荐会员") }}#}
+                        <div class="form-control">{{ form.user_pid.data | nickname }}</div>
+
+                        {% for error in form.user_pid.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.nickname.errors %} has-error{% endif %}">
+                    {{ form.nickname.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.nickname(class="form-control", placeholder="用户名称", disabled="disabled") }}
+                        {% for error in form.nickname.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.email.errors %} has-error{% endif %}">
+                    {{ form.email.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.email(class="form-control", placeholder="电子邮箱") }}
+                        {% for error in form.email.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.area_id.errors %} has-error{% endif %}">
+                    {{ form.area_id.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.area_id(data_header="选择手机区号") }}
+                        {% for error in form.area_id.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.phone.errors %} has-error{% endif %}">
+                    {{ form.phone.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.phone(class="form-control", placeholder="手机号码", type="tel", maxlength=11) }}
+                        {% for error in form.phone.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.sms.errors %} has-error{% endif %}">
+                    {{ form.sms.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            {{ form.sms(class="form-control", placeholder="短信验证码", maxlength=6) }}
+                            <span class="input-group-btn">
+                                <button id="get_sms_btn" class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-envelope"></span> <i>发送短信</i>
+                                </button>
+                            </span>
+                        </div>
+                        {% for error in form.sms.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.birthday.errors %} has-error{% endif %}">
+                    {{ form.birthday.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.birthday(class="form-control", placeholder="Birthday", type="date") }}
+                        {% for error in form.birthday.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.real_name.errors %} has-error{% endif %}">
+                    {{ form.real_name.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.real_name(class="form-control", placeholder="真实姓名") }}
+                        {% for error in form.real_name.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.id_card.errors %} has-error{% endif %}">
+                    {{ form.id_card.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        {{ form.id_card(class="form-control", placeholder="身份证号", maxlength=18) }}
+                        {% for error in form.id_card.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.create_time.errors %} has-error{% endif %}">
+                    {{ form.create_time.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        <div class="form-control">
+                            {{ moment(form.create_time.data).format('YYYY-MM-DD HH:mm:ss') }}
+                        </div>
+                        {% for error in form.create_time.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group{% if form.update_time.errors %} has-error{% endif %}">
+                    {{ form.update_time.label(class="col-sm-2 control-label") }}
+                    <div class="col-sm-10">
+                        <div class="form-control">
+                            {{ moment(form.update_time.data).format('YYYY-MM-DD HH:mm:ss') }}
+                        </div>
+                        {% for error in form.update_time.errors %}
+                            <span class="help-block">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-success btn-load" data-loading-text="保存中">保存</button>
+                        <button type="reset" class="btn btn-default">重新填写</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- 用户概要 -->
+        <div class="col-lg-4 col-md-12">
+            <!-- 状态信息 -->
+            {% include('user/_status.html') %}
+            <!-- 推广链接 -->
+            {% include('user/_invite_link.html') %}
+            <!-- 账户信息 -->
+            {% include('user/_account_info.html') %}
+            <!-- 我的团队 -->
+            {% include('user/_team_tree.html') %}
+        </div>
+    </div>
+
+
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='plugin/clipboard.js-1.6.1/dist/clipboard.min.js') }}"></script>
+
+<script>
+    /**
+     * 用户自己激活
+     * @returns {boolean}
+     */
+    function self_active() {
+        // console.log($(form).serialize());
+        $.ajax({
+            url: "{{ url_for('user.ajax_self_active') }}",
+            type: 'GET',
+            dataType: 'json',
+            success: function (result) {
+                // console.log(result);
+                if(result.hasOwnProperty('error')){
+                    alert(result.error);
+                }else {
+                    alert(result.success);
+                    document.location.reload();
+                }
+            }
+        });
+        return false;
+    }
+</script>
+
+<script>
+    //推广链接复制
+    var clipboard = new Clipboard('.btn');
+
+    clipboard.on('success', function(e) {
+        // console.info('Action:', e.action);
+        // console.info('Text:', e.text);
+        // console.info('Trigger:', e.trigger);
+        e.clearSelection();
+        alert('复制成功，粘贴使用推广链接');
+    });
+
+    clipboard.on('error', function(e) {
+        // console.error('Action:', e.action);
+        // console.error('Trigger:', e.trigger);
+        alert('操作失败，重新复制推广链接');
+    });
+</script>
+<script>
+    // 初始化赋值
+    var area_id = $('#area_id');
+    area_id.selectpicker('val', '{{ form.area_id.data }}');
+    // 处理选项修改
+    area_id.on('changed.bs.select', function (event, clickedIndex, newValue, oldValue) {
+        // console.log($('#area_id').val());
+        // console.log(event);
+        // console.log(clickedIndex);
+        // console.log(newValue);
+        // console.log(oldValue);
+    });
+</script>
+
+<script>
+    // 倒计时
+    var countdown=60;
+    function set_time(val) {
+        if (countdown == 0) {
+            val.removeAttr("disabled");
+            val.find("i").first().html("发送短信");
+            countdown = 60;
+            return;
+        } else {
+            val.attr("disabled", true);
+            val.find("i").first().html("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function () {
+            set_time(val)
+        }, 1000)
+    }
+    // 点击发送手机验证码到手机 - ajax
+    $('#get_sms_btn').click(function () {
+        var cur_obj = $(this);
+        var phone = $('#phone');
+        // 校验手机号码，图形验证码
+        if(!phone.val()){
+            phone.focus();
+            return;
+        }
+        $.getJSON('{{ url_for('user.ajax_get_sms_code') }}',
+            {
+                area_id: area_id.val(),
+                phone: phone.val()
+            }, function (data) {
+                var result = data.result;  // true/false
+                if(result==false){
+                    //console.log(result);
+                    return false;
+                }else {
+                    $('#sms').focus();
+                    set_time(cur_obj);
+                }
+            }
+        );
+    });
+</script>
+{% endblock %}
